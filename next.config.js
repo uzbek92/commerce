@@ -19,6 +19,10 @@ module.exports = {
         protocol: 'https',
         hostname: 'medusa-server-testing.s3.amazonaws.com',
         pathname: '/**'
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
       }
     ]
   }
