@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { calculateVariantAmount, computeAmount, convertToDecimal } from './helpers';
 import {
   Cart,
+  CartCompletion,
   CartItem,
   Image,
   MedusaCart,
@@ -517,4 +518,38 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
+
+/**
+ * Checkout flow
+ */
+
+export async function initPaymentSessions(cartId: string): Promise<Cart> {
+  const paymentSessions = await medusaRequest({
+    method: 'POST',
+    path: `/store/carts/${cartId}/payment-sessions`,
+  });
+
+  return reshapeCart(paymentSessions.body.cart);
+}
+
+export async function selectPaymentSession(cartId: string, paymentProviderId: string): Promise<Cart> {
+  const paymentSession = await medusaRequest({
+    method: 'POST',
+    path: `/store/carts/${cartId}/payment-sessions`,
+    payload: {
+      provider_id: paymentProviderId,
+    },
+  });
+
+  return reshapeCart(paymentSession.body.cart);
+}
+
+export async function completeCart(cartId: string): Promise<CartCompletion> {
+  const response = await medusaRequest({
+    method: 'POST',
+    path: `/store/carts/${cartId}/complete`,
+  });
+
+  return response.body as CartCompletion;
 }
