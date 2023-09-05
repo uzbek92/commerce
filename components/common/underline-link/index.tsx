@@ -1,5 +1,5 @@
-import ArrowRight from '@modules/common/icons/arrow-right';
 import Link from 'next/link';
+import ArrowRight from '../icons/arrow-right';
 
 type UnderlineLinkProps = {
   href: string;
