@@ -431,3 +431,62 @@ export type ProductVariantInfo = Pick<ProductVariantEntity, 'prices'>;
 type ConvertDateToString<T extends {}> = {
   [P in keyof T]: T[P] extends Date ? Date | string : T[P];
 };
+
+/** Checkout flow */
+
+export enum CartStatus {
+  pending = "pending",
+  completed = "completed",
+  archived = "archived",
+  canceled = "canceled",
+  requires_action = "requires_action"
+}
+
+export enum FullfillmentStatus {
+  not_fulfilled = "not_fulfilled",
+  partially_fulfilled = "partially_fulfilled",
+  fullfilled = "fullfilled",
+  partially_shipped = "partially_shipped",
+  shipped = "shipped",
+  partially_returned = "partially_returned",
+  returned = "returned",
+  canceled = "canceled",
+  requires_action = "requires_action"
+}
+
+export enum PaymentStatus {
+  not_paid = "not_paid",
+  awaiting = "awaiting",
+  captured = "captured",
+  partially_refunded = "partially_refunded",
+  refunded = "refunded",
+  canceled = "canceled",
+  requires_action = "requires_action"
+}
+
+export type CartCompletion = {
+  type: "order" | "cart" | "swap",
+  data: {
+    id: string,
+    status: CartStatus,
+    fulfillment_status: FullfillmentStatus,
+    payment_status: PaymentStatus,
+    display_id: number,
+    cart_id: string,
+    customer_id: string,
+    email: string,
+    billing_address_id: string,
+    shipping_address_id: string,
+    region_id: string,
+    currency_code: string,
+    tax_rate: number,
+    draft_order_id?: string | null,
+    canceled_at: string,
+    no_notification: boolean,
+    idempotency_key: string,
+    external_id: string | null,
+    created_at: string,
+    updated_at: string,
+    metadata?: Record<string, unknown> | null,
+  }
+}
